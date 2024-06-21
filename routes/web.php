@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MediaController;
+use App\Mail\MyTestEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,8 @@ foreach ($routes as $key => $controllerName) {
     Route::post('/' . $key . '/{id}', [$controllerName, 'update'])->name($key . '.update');
     Route::get('/' . $key . '/delete/{id}', [$controllerName, 'delete'])->name($key . '.delete');
 }
+
+Route::get('/testemail', function() {
+    $name = "Funny Coder";
+    Mail::to('admin@gmail.com')->send(new MyTestEmail($name));
+});
