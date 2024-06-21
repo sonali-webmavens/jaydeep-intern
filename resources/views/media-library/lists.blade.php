@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($media as $value)
+        @foreach($medias as $value)
             <tr>
                 <td>{{ $value->id }}</td>
                 <td>{{ $value->title }}</td>
