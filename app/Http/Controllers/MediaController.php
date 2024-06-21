@@ -36,14 +36,22 @@ class MediaController extends Controller
 
     public function update(request $request ,$id){
         $media=Media::find($id);
-        $media->title = $request->input('title');
-        $media->save();
-
+        $media->update([
+            'title' =>$request->input('title')
+        ]);
     
         if ($request->hasFile('image')) {
-            
+            $media->clearMediaCollection('post_image');
             $media->addMediaFromRequest('image')->toMediaCollection('post_image');
         }
+        
         return redirect()->route('media.lists');
+    }
+
+    public function delete($id){
+        $media=Media::find($id);
+        $media->delete();
+
+        return back();
     }
 }
