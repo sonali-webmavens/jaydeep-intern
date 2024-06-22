@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\CompanyController;
 use App\Mail\MyTestEmail;
 
 /*
@@ -23,6 +24,7 @@ Route::view('employee-list', 'employee-list');
 
 $routes = [
     "media" => App\Http\Controllers\MediaController::class,
+    "company" => App\Http\Controllers\CompanyController::class,
    
 ];
 
@@ -35,7 +37,4 @@ foreach ($routes as $key => $controllerName) {
     Route::get('/' . $key . '/delete/{id}', [$controllerName, 'delete'])->name($key . '.delete');
 }
 
-Route::get('/testemail', function() {
-    $name = "Funny Coder";
-    Mail::to('admin@gmail.com')->send(new MyTestEmail($name));
-});
+

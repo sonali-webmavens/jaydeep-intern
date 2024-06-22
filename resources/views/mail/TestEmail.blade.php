@@ -8,7 +8,7 @@
 
     <style>
         p {
-            font-size: 12px;
+            font-size: 18px;
         }
 
         .signature {
@@ -18,7 +18,7 @@
 </head>
 <body>
 <div>
-    <p>Hey {{ $name }},</p>
+    <p>hey Laravel </p>
     <p>Can your Laravel app send emails yet? 😉 </p>
     <p class="signature">Mailtrap</p>
 </div>
