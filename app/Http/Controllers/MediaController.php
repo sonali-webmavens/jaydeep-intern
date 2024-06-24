@@ -24,8 +24,8 @@ class MediaController extends Controller
     }
 
     public function lists(){
-        $media=Media::all();
-        return view('media-library.lists',compact('media'));
+        $medias=Media::all();
+        return view('media-library.lists',compact('medias'));
     }
 
     public function edit($id){
