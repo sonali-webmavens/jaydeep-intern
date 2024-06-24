@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MediaController;
+use App\Http\Controllers\CompanyController;
+use App\Mail\MyTestEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/employee-register', function () {
     return view('employee-register');
 });
 
 Route::view('employee-list', 'employee-list');
+
+$routes = [
+    "media" => App\Http\Controllers\MediaController::class,
+    "company" => App\Http\Controllers\CompanyController::class,
+   
+];
+
+foreach ($routes as $key => $controllerName) {
+    Route::get('/' . $key . '-create', [$controllerName, 'create'])->name($key . '.create');
+    Route::post('/' . $key, [$controllerName, 'save'])->name($key . '.save');
+    Route::get('/' . $key, [$controllerName, 'lists'])->name($key.'.lists');
+    Route::get('/' . $key . '/edit/{id}', [$controllerName, 'edit'])->name($key . '.edit');
+    Route::post('/' . $key . '/{id}', [$controllerName, 'update'])->name($key . '.update');
+    Route::get('/' . $key . '/delete/{id}', [$controllerName, 'delete'])->name($key . '.delete');
+}
+
+
