@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\CompanyController;
+use App\Mail\MyTestEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,7 @@ Route::view('employee-list', 'employee-list');
 
 $routes = [
     "media" => App\Http\Controllers\MediaController::class,
+    "company" => App\Http\Controllers\CompanyController::class,
    
 ];
 
@@ -33,3 +36,5 @@ foreach ($routes as $key => $controllerName) {
     Route::post('/' . $key . '/{id}', [$controllerName, 'update'])->name($key . '.update');
     Route::get('/' . $key . '/delete/{id}', [$controllerName, 'delete'])->name($key . '.delete');
 }
+
+
