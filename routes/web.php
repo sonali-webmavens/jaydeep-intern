@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\NewCompanyController;
 use App\Mail\MyTestEmail;
 
 /*
@@ -37,4 +38,5 @@ foreach ($routes as $key => $controllerName) {
     Route::get('/' . $key . '/delete/{id}', [$controllerName, 'delete'])->name($key . '.delete');
 }
 
-
+Route::get('/newcompany', [NewCompanyController::class,'show'])->name('show');
+Route::get('/export', [NewCompanyController::class,'export'])->name('export');
