@@ -26,6 +26,7 @@ Route::view('employee-list', 'employee-list');
 $routes = [
     "media" => App\Http\Controllers\MediaController::class,
     "company" => App\Http\Controllers\CompanyController::class,
+    "userprofile" => App\Http\Controllers\UserProfileController::class,
    
 ];
 
