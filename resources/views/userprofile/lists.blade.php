@@ -24,8 +24,13 @@
             <tr>
                 <td>{{ $profile->id }}</td>
                 <td>
-                    <img src="{{ asset('storage/' . $profile->image) }}" alt="Profile Picture" width="100" height="100">
+                @if($profile->image)
+                        @foreach(json_decode($profile->image, true) as $file)
+                                <img src="{{Storage::disk('s3')->url('jaydeep-test/files/'.$file) }}" alt="Profile Picture" width="100" height="100"><br>                       
+                         @endforeach
+                    @endif
                 </td>
+                
                 <td><a href="{{route('userprofile.edit',$profile->id)}}"><button>edit</button></a>
                 <a href="{{route('userprofile.delete',$profile->id)}}"><button>delete</button></a></td>
             </tr>

@@ -8,65 +8,82 @@ use App\Models\UserProfile;
 
 class UserProfileController extends Controller
 {
-    public function create(){
+    public function create()
+    {
         return view('userprofile.create');
     }
 
-    public function save(request $request){
-        $image = $request->file('image'); 
-        $path = 'profile_pictures/' . $image->getClientOriginalName();
+    public function save(Request $request)
+    {
+        
+        $files = $request->file('image');
+        $uploadedFiles = [];
+        
+        foreach ($files as $file) {
+            $imagename=$file->getClientOriginalName();
+            $filePath = 'jaydeep-test/files/' . $imagename;
+           Storage::disk('s3')->put($filePath, file_get_contents($file));
+           Storage::disk('s3')->url($filePath);
 
-         Storage::disk('public')->put($path, file_get_contents($image));
+           $uploadedFiles[] = $imagename;
+        }
 
         UserProfile::create([
-            'image' => $path
+            'image' => json_encode($uploadedFiles)
         ]);
 
-        return redirect()-> route('userprofile.lists');
+        return redirect()->route('userprofile.lists');
     }
 
-    public function lists(){
+    public function lists()
+    {
         $userProfiles = UserProfile::all();
         return view('userprofile.lists', compact('userProfiles'));
     }
 
     public function edit($id)
     {
-        $userprofile = UserProfile::find($id);
-        return view('userprofile.create', compact('userprofile'));
+        $userProfile = UserProfile::find($id);
+        return view('userprofile.create', ['userprofile' => $userProfile]);
     }
 
-    public function update(request $request,$id){
-
-        $userprofile = UserProfile::find($id);
-
+    public function update(Request $request, $id)
+    {
+        $userProfile = UserProfile::find($id);
+       
         if ($request->hasFile('image')) {
+            $files = $request->file('image');
 
-            if ($userprofile->image) {
-                Storage::disk('public')->delete($userprofile->image);
+            $oldFiles = json_decode($userProfile->image, true);
+            foreach ($oldFiles as $oldFile) {
+                Storage::disk('s3')->delete($oldFile);
             }
 
-            $image = $request->file('image'); 
-            $path = 'profile_pictures/' . $image->getClientOriginalName();
-
-            Storage::disk('public')->put($path, file_get_contents($image));
-
-            $userprofile->update([
-                'image' => $path,
+            $uploadedFiles = [];
+            foreach ($files as $file) {
+                $imagename=$file->getClientOriginalName();
+                $filePath = 'jaydeep-test/files/' . $imagename;
+                Storage::disk('s3')->put($filePath, file_get_contents($file));
+                $uploadedFiles[] = $imagename;
+            }
+            $userProfile->update([
+                'image' => json_encode($uploadedFiles)
             ]);
         }
+
         return redirect()->route('userprofile.lists');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
+        $userProfile = UserProfile::find($id);
+       
+        $files = json_decode($userProfile->image);
+        foreach ($files as $file) {
+            Storage::disk('s3')->delete($file);
+        }
 
-        $userprofile = UserProfile::find($id);
-            if ($userprofile->image) {
-                Storage::disk('public')->delete($userprofile->image);
-            }
-        $userprofile->delete();
+        $userProfile->delete();
         return redirect()->route('userprofile.lists');
-
     }
 }
-
