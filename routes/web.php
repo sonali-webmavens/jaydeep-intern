@@ -41,3 +41,7 @@ foreach ($routes as $key => $controllerName) {
 
 Route::get('/newcompany', [NewCompanyController::class,'show'])->name('show');
 Route::get('/export', [NewCompanyController::class,'export'])->name('export');
+
+Route::get('/company/{id}/restore', [CompanyController::class, 'restore'])->name('company.restore');
+Route::get('/company/{id}/force-delete', [CompanyController::class, 'forceDelete'])->name('company.forceDelete');
+Route::get('/deletecompany', [CompanyController::class, 'deletecompany'])->name('company.deletecompany');

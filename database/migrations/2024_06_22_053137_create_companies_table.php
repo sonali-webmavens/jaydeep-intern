@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
@@ -26,8 +28,9 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down($table)
     {
         Schema::dropIfExists('companies');
+        $table->dropSoftDeletes();
     }
 };
