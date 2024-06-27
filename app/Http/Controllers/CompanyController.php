@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Mail\MyTestEmail;
 use App\Jobs\SendEmailJob;
-use Carbon\Carbon;
+use App\Models\Scopes\DeletedScope;
 class CompanyController extends Controller
 {
     public function create(){
@@ -32,8 +32,14 @@ class CompanyController extends Controller
     }
 
     public function lists(){
-        $companies=Company::all();
-        return view('company.lists',compact('companies'));
+        // active company
+        $companies = Company::withoutGlobalScope(DeletedScope::class)->get();
+        $companyCount = Company::withoutGlobalScope(DeletedScope::class)->count();
+
+        // deleted company 
+        $deletedCompanies = Company::onlyTrashed()->get();
+        $deletedCompanyCount =  Company::onlyTrashed()->count();
+        return view('company.lists',compact('companies','deletedCompanies','companyCount','deletedCompanyCount'));
     }
 
     public function edit($id){
@@ -53,9 +59,36 @@ class CompanyController extends Controller
     }
 
     public function delete($id){
-        $company=Company::find($id);
+        $company=Company::findOrFail($id);
         $company->delete();
         return back();
+    }
+
+    public function restore($id)
+    {
+        $company = Company::withTrashed()->findOrFail($id);
+        $company->restore();
+
+        return back();
+    }
+
+    public function forceDelete($id)
+    {
+        $company = Company::withTrashed()->findOrFail($id);
+        $company->forceDelete();
+
+        return back();
+    }
+
+    public function deletecompany(){
+        
+        $companies = Company::all();
+        $deletedCompanies = Company::onlyTrashed()->get();
+        
+        $companyCount = $companies->count();
+        $deletedCompanyCount =  Company::onlyTrashed()->count();
+
+        return view('company.deletecompany',compact('companyCount', 'deletedCompanies', 'deletedCompanyCount', 'companies'));
     }
 
 }
