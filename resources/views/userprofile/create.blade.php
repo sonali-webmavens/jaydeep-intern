@@ -10,14 +10,14 @@
 <body>
   <br><br><br>
   <div class="container shadow">
+    <center> <h1 class="my-4">{{ isset($userprofile) ? 'Edit' : 'Create' }} Profile</h1></center>
 
-    <center><h2>CREAT POST</h2></center>
-    <form action="{{isset($userprofile) ? route('userprofile.update',$userprofile->id) :route('userprofile.save')}}" method="post" enctype="multipart/form-data">
+    <form action="{{isset($userprofile) ? route('userprofile.update',$userprofile->id):route('userprofile.save')}}" method="post" enctype="multipart/form-data" >
     @csrf
     
       <div class="form-group">
-        <label for="post">post:</label>
-        <input type="file" class="form-control " name="image"  required>
+        <label for="post"> PROFILE:</label>
+        <input type="file" class="form-control " name="image[]" multiple required>
       </div>
       
       <button type="submit" class="btn form-control  custom-btn">Submit</button>
