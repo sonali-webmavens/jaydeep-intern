@@ -22,7 +22,7 @@ class UserProfileController extends Controller
         foreach ($files as $file) {
             $imagename=$file->getClientOriginalName();
             $filePath = 'jaydeep-test/files/' . $imagename;
-           Storage::disk('s3')->put($filePath, file_get_contents($file));
+           Storage::disk('s3')->put($filePath, file_get_contents($file),'public');
            Storage::disk('s3')->url($filePath);
 
            $uploadedFiles[] = $imagename;
